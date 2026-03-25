@@ -32,7 +32,7 @@ openclaw/ ├── config/ # Configuration files ├── data/ # Job data and
 (rerun without)
 Collecting workspace information
 
-Here is an updated README.md for your repository:
+
 
 openclaw/ ├── config/ # Configuration files ├── data/ # Job data and sent job records ├── fetcher/ # Job fetching scripts ├── notifier/ # Notification scripts ├── web/ # Web interface ├── docker-compose.yml # Docker Compose configuration ├── Dockerfile # Base Dockerfile ├── run.py # Main script for sending notifications └── .env # Environment variables
 
