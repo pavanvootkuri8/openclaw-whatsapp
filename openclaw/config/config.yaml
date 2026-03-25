@@ -1,0 +1,37 @@
+schedule:
+  interval_minutes: 15
+
+filters:
+  keywords:
+    - "DevOps"
+    - "SRE"
+    - "Platform Engineer"
+    - "Cloud Engineer"
+
+  exclude_keywords:
+    - "Senior Director"
+    - "Manager"
+
+  locations:
+    - "Remote"
+    - "Texas"
+    - "United States"
+
+sources:
+  - name: linkedin
+    type: linkedin
+    query: "DevOps Engineer"
+    location: "United States"
+    experience_level: "mid_senior"
+
+  - name: indeed
+    type: indeed
+    query: "Site Reliability Engineer"
+    location: "Remote"
+
+notifications:
+  whatsapp:
+    enabled: true
+
+  email:
+    enabled: false

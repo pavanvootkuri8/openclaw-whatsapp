@@ -1,0 +1,51 @@
+services:
+  openclaw:
+    image: ghcr.io/openclaw/openclaw:latest
+    container_name: openclaw
+    volumes:
+      - ./config:/app/config
+      - ./data:/app/data
+      - ./logs:/app/logs
+
+
+  fetcher:
+    build: ./fetcher
+    container_name: jobs-fetcher
+    volumes:
+      - ./data:/app/data
+    environment:
+      - OUTPUT_PATH=/app/data/jobs.yaml
+      - GREENHOUSE_COMPANIES=figma
+      - LEVER_COMPANIES=
+      - JOB_KEYWORDS=DevOps,SRE,Platform Engineer,Cloud Engineer,infrastrucure Engineer
+      - JOB_EXCLUDE=Director
+      - JOB_LOCATIONS=Dallas,Texas,Remote
+    command: >
+      sh -c "while true; do python /app/fetch_jobs.py; sleep 900; done"
+
+  notifier:
+    build: ./notifier
+    container_name: openclaw-notifier
+    volumes:
+      - ./data:/app/data
+      - ./run.py:/app/run.py
+      - ./whatsapp_notifier.py:/app/whatsapp_notifier.py
+    environment:
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+      - WHATSAPP_FROM=${WHATSAPP_FROM}
+      - WHATSAPP_TO=${WHATSAPP_TO}
+    command: >
+      sh -c "while true; do python run.py; sleep 60; done"
+    depends_on:
+      - fetcher
+
+  web:
+    build: ./web
+    container_name: openclaw-web
+    ports:
+      - "5001:5000"
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - fetcher
